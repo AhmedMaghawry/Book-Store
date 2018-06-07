@@ -39,12 +39,16 @@ public class BookAdapterCart extends RecyclerView.Adapter<cartHolder> {
         holder.price.setText("$ " + book.getPrice());
         holder.publisher.setText(book.getPublisher());
         holder.category.setText(book.getCategory());
+        holder.quantity.setText(ca.quan.get(position));
         //holder.thumbnail.setImageResource(book.getImg());
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ca.index = position;
                 ca.removeBook();
+                notifyDataSetChanged();
+                //itemView.getContext().notifyAll();
+                //itemView.notifyAll();
             }
         });
     }

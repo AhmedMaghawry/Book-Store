@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -38,11 +39,15 @@ public class HomeActivity extends AppCompatActivity {
     private BookAdapterCard mAdapterCard;
     // Progress Dialog
     private ProgressDialog pDialog;
+    List<Book> temp;
+    int limit = 0;
     // Creating JSON Parser object
     HttpJsonParser jParser = new HttpJsonParser();
 
     private ImageView logout, profile, promote, back;
     private FloatingActionButton add, cart;
+
+    Button backy, next;
 
     // url to get all products list
     private static String url_all_products = "http://10.42.0.1:8085/Android_DB_connect/getBooks.php";
@@ -100,6 +105,8 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        backy = findViewById(R.id.backIt);
+        next = findViewById(R.id.next);
         final Cart finalCarty = carty;
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +136,33 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         // Loading products in Background Thread
-        new LoadAllProducts().execute();
+        new LoadAllProducts().execute(limit+"");
+
+        backy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                limit -= 100;
+                if (limit < 0) {
+                    limit = 0;
+                } else {
+                    temp = new ArrayList<>(books);
+                    books.clear();
+                    new LoadAllProducts().execute(limit+"");
+                    mAdapterCard.notifyDataSetChanged();
+                }
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    limit += 100;
+                    temp = new ArrayList<>(books);
+                    books.clear();
+                    new LoadAllProducts().execute(limit+"");
+                    mAdapterCard.notifyDataSetChanged();
+            }
+        });
 
     }
 
@@ -202,6 +235,7 @@ public class HomeActivity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             // Building Parameters
             Map<String, String> params = new HashMap<>();
+            params.put("num", args[0]);
             // getting JSON string from URL
             JSONObject json = jParser.makeHttpRequest(url_all_products, "GET", params);
 
@@ -237,6 +271,8 @@ public class HomeActivity extends AppCompatActivity {
                         }
                         books.add(new Book(isb, tit, pub, au, year, pri, cate, num, mini));
                     }
+                } else  {
+                    books = temp;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -254,16 +290,18 @@ public class HomeActivity extends AppCompatActivity {
             // updating UI from Background Thread
             runOnUiThread(new Runnable() {
                 public void run() {
-                    recyclerView = findViewById(R.id.rv);
-                    mAdapterCard = new BookAdapterCard(books, priority, carty);
-                    RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(con, 2);
-                    recyclerView.setLayoutManager(mLayoutManager);
-                    recyclerView.setItemAnimator(new DefaultItemAnimator());
-                    recyclerView.setAdapter(mAdapterCard);
+                    if (books.size() != 0) {
+                        recyclerView = findViewById(R.id.rv);
+                        mAdapterCard = new BookAdapterCard(books, priority, carty);
+                        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(con, 2);
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(mAdapterCard);
+                    } else {
+                        limit -= 100;
+                    }
                 }
             });
-
         }
-
     }
 }
