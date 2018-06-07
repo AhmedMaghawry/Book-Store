@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="15"
+    tools:context=".View.Cart_Activity"
+    android:background="@color/cardview_light_background">
+    <include layout="@layout/tool_bar"
+        android:id="@+id/tool_bar"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="13"
+        android:id="@+id/rv"
+        android:background="@color/cardview_light_background"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="Confirm"
+        android:id="@+id/con"
+        android:textColor="@color/cardview_light_background"
+        android:background="@color/money"
+        android:layout_margin="5dp"/>
+
+</LinearLayout>
