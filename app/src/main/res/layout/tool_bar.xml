@@ -27,6 +27,34 @@
             android:layout_height="match_parent"
             android:background="@null"
             android:src="@drawable/trophy"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/placeOrders"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_pack"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/confirmOrders"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_packok"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/statistics"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:src="@drawable/ic_stat"
+            android:layout_marginRight="10dp"
             android:visibility="gone"/>
 
         <ImageView
@@ -34,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:elevation="0dp"
-            android:layout_margin="5dp"
+            android:layout_marginRight="10dp"
             android:src="@drawable/logout" />
 
         <ImageView

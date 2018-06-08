@@ -15,7 +15,7 @@
         android:layout_margin="5dp">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:src="@drawable/ic_reader"/>
         <TextView
             android:layout_width="wrap_content"
@@ -26,6 +26,14 @@
             android:textSize="30sp"
             android:textColor="@color/black"
             android:layout_gravity="bottom"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@color/colorPrimary"
+            android:text="Edit"
+            android:id="@+id/editTitle"
+            android:layout_margin="10dp"
+            android:layout_gravity="right|bottom"/>
     </FrameLayout>
 
     <LinearLayout
@@ -72,6 +80,14 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp"
                 android:layout_marginLeft="20dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary"
+                android:text="Edit"
+                android:id="@+id/editpub"
+                android:gravity="center"
+                android:layout_marginLeft="30dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -91,7 +107,15 @@
                 tools:text="DDDD"
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp"
-                android:layout_marginLeft="40dp"/>
+                android:layout_marginLeft="45dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary"
+                android:text="Edit"
+                android:id="@+id/editauth"
+                android:gravity="center"
+                android:layout_marginLeft="30dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -112,6 +136,14 @@
                 tools:text="DDDD"
                 android:textSize="15sp"
                 android:layout_marginLeft="65dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary"
+                android:text="Edit"
+                android:id="@+id/edityear"
+                android:gravity="center"
+                android:layout_marginLeft="30dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -132,6 +164,14 @@
                 tools:text="DDDD"
                 android:textSize="15sp"
                 android:layout_marginLeft="25dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary"
+                android:text="Edit"
+                android:id="@+id/editcat"
+                android:gravity="center"
+                android:layout_marginLeft="30dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -151,6 +191,70 @@
                 tools:text="DDDD"
                 android:textSize="15sp"
                 android:layout_marginLeft="60dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary"
+                android:text="Edit"
+                android:id="@+id/editprice"
+                android:gravity="center"
+                android:layout_marginLeft="30dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/admin2">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Book Numbers : "
+                android:textColor="@color/cardview_dark_background"
+                android:textSize="20sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/num"
+                android:textColor="@color/colorPrimary"
+                tools:text="DDDD"
+                android:textSize="15sp"
+                android:layout_marginLeft="25dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary"
+                android:text="Edit"
+                android:id="@+id/editnum"
+                android:gravity="center"
+                android:layout_marginLeft="30dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/admin3">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Book Minimum : "
+                android:textColor="@color/cardview_dark_background"
+                android:textSize="20sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/min"
+                android:textColor="@color/colorPrimary"
+                tools:text="DDDD"
+                android:textSize="15sp"
+                android:layout_marginLeft="20dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary"
+                android:text="Edit"
+                android:id="@+id/editmin"
+                android:gravity="center"
+                android:layout_marginLeft="30dp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -168,8 +272,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Quantity You need : "
+                android:id="@+id/vv"
                 android:textColor="@color/cardview_dark_background"
-                android:textSize="20sp"/>
+                android:textSize="15sp"/>
             <EditText
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
@@ -182,10 +287,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/order"
-            android:layout_margin="10dp"
             android:textSize="20sp"
             android:text="Order"
             android:background="@color/money"
-            android:textColor="@color/cardview_light_background"/>
+            android:textColor="@color/cardview_light_background" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/admin">
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:id="@+id/cancel"
+                android:textSize="20sp"
+                android:text="Cancel" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/confirm"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:text="Confirm"
+                android:background="@color/money"
+                android:textColor="@color/cardview_light_background"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

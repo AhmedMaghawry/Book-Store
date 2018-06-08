@@ -44,7 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     // Creating JSON Parser object
     HttpJsonParser jParser = new HttpJsonParser();
 
-    private ImageView logout, profile, promote, back;
+    private ImageView logout, profile, promote, back, makeOrder, confirmOrder, statistics;
     private FloatingActionButton add, cart;
 
     Button backy, next;
@@ -173,10 +173,20 @@ public class HomeActivity extends AppCompatActivity {
         profile = toolbar.findViewById(R.id.profile);
         promote = toolbar.findViewById(R.id.promote);
         back = toolbar.findViewById(R.id.back);
-        if (priority == 0)
+        makeOrder = toolbar.findViewById(R.id.placeOrders);
+        confirmOrder = toolbar.findViewById(R.id.confirmOrders);
+        statistics = toolbar.findViewById(R.id.statistics);
+        if (priority == 0) {
             promote.setVisibility(View.GONE);
-        else
+            makeOrder.setVisibility(View.GONE);
+            confirmOrder.setVisibility(View.GONE);
+            statistics.setVisibility(View.GONE);
+        } else {
             promote.setVisibility(View.VISIBLE);
+            makeOrder.setVisibility(View.VISIBLE);
+            confirmOrder.setVisibility(View.VISIBLE);
+            statistics.setVisibility(View.VISIBLE);
+        }
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,6 +213,30 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        makeOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        confirmOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        statistics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);

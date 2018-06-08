@@ -13,7 +13,7 @@ import com.ezzat.bookstore.R;
  */
 
 public class cartHolder extends RecyclerView.ViewHolder {
-    public TextView title, publisher, category, price, quantity;
+    public TextView title, publisher, category, price, quantity, total;
     LinearLayout all;
     Button delete;
     public cartHolder(View itemView) {
@@ -25,5 +25,6 @@ public class cartHolder extends RecyclerView.ViewHolder {
         all = itemView.findViewById(R.id.all);
         delete = itemView.findViewById(R.id.delete);
         quantity = itemView.findViewById(R.id.qu);
+        total = itemView.findViewById(R.id.total);
     }
 }
