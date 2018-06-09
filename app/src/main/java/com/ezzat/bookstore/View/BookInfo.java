@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ezzat.bookstore.Controller.HttpJsonParser;
 import com.ezzat.bookstore.Model.Book;
@@ -63,6 +64,7 @@ public class BookInfo extends AppCompatActivity {
                     cart.books.add(book);
                     cart.quan.add(quan.getText().toString());
                     go.putExtra("cart", cart);
+                    go.putExtra("user", getIntent().getSerializableExtra("user"));
                     startActivity(go);
                 } else {
                     new AlertDialog.Builder(BookInfo.this)
@@ -134,6 +136,8 @@ public class BookInfo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BookInfo.this, HomeActivity.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
@@ -282,8 +286,10 @@ public class BookInfo extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BookInfo.this, WelcomeActivity.class);
+                Intent intent = new Intent(BookInfo.this, Profile.class);
                 intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -291,7 +297,10 @@ public class BookInfo extends AppCompatActivity {
         promote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BookInfo.this, WelcomeActivity.class);
+                Intent intent = new Intent(BookInfo.this, Promote.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -301,6 +310,9 @@ public class BookInfo extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(BookInfo.this, HomeActivity.class);
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -308,7 +320,10 @@ public class BookInfo extends AppCompatActivity {
         makeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BookInfo.this, WelcomeActivity.class);
+                Intent intent = new Intent(BookInfo.this, AddOrder.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -316,7 +331,10 @@ public class BookInfo extends AppCompatActivity {
         confirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BookInfo.this, WelcomeActivity.class);
+                Intent intent = new Intent(BookInfo.this, ConfirmOrder.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -324,7 +342,10 @@ public class BookInfo extends AppCompatActivity {
         statistics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BookInfo.this, WelcomeActivity.class);
+                Intent intent = new Intent(BookInfo.this, Statistics.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -333,6 +354,8 @@ public class BookInfo extends AppCompatActivity {
     public class editBook extends AsyncTask<String, Void, Void> {
 
         HttpJsonParser jParser = new HttpJsonParser();
+        private boolean finished = true;
+
         /**
          * getting All products from url
          * */
@@ -349,15 +372,32 @@ public class BookInfo extends AppCompatActivity {
             params.put("min", args[7]);
             // getting JSON string from URL
             JSONObject json = jParser.makeHttpRequest("http://10.42.0.1:8085/Android_DB_connect/editBook.php", "GET", params);
+            try {
+                int success = json.getInt("success");
+                if (success == 0) {
+                    finished = false;
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(self, "Error Happened", Toast.LENGTH_SHORT);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (finished) {
                 Intent intent = new Intent(BookInfo.this, HomeActivity.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
+            }
         }
     }
 }

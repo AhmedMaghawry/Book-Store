@@ -22,6 +22,7 @@ import com.ezzat.bookstore.Controller.HttpJsonParser;
 import com.ezzat.bookstore.Controller.cardView.BookAdapterCard;
 import com.ezzat.bookstore.Model.Book;
 import com.ezzat.bookstore.Model.Cart;
+import com.ezzat.bookstore.Model.User;
 import com.ezzat.bookstore.R;
 
 import org.json.JSONArray;
@@ -101,7 +102,10 @@ public class HomeActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+                Intent intent = new Intent(HomeActivity.this, AddBook.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -113,6 +117,8 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, Cart_Activity.class);
                 intent.putExtra("cart", finalCarty);
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -198,8 +204,10 @@ public class HomeActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+                Intent intent = new Intent(HomeActivity.this, Profile.class);
                 intent.putExtra("cart", carty);
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -207,23 +215,34 @@ public class HomeActivity extends AppCompatActivity {
         promote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+                Intent intent = new Intent(HomeActivity.this, Promote.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
 
+        back.setVisibility(View.GONE);
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
+                startActivity(intent);*/
             }
         });
 
         makeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+                Intent intent = new Intent(HomeActivity.this, AddOrder.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -231,7 +250,10 @@ public class HomeActivity extends AppCompatActivity {
         confirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+                Intent intent = new Intent(HomeActivity.this, ConfirmOrder.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -239,7 +261,10 @@ public class HomeActivity extends AppCompatActivity {
         statistics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+                Intent intent = new Intent(HomeActivity.this, Statistics.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         });
@@ -326,7 +351,7 @@ public class HomeActivity extends AppCompatActivity {
                 public void run() {
                     if (books.size() != 0) {
                         recyclerView = findViewById(R.id.rv);
-                        mAdapterCard = new BookAdapterCard(books, priority, carty);
+                        mAdapterCard = new BookAdapterCard(books, priority, carty, (User)getIntent().getSerializableExtra("user"));
                         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(con, 2);
                         recyclerView.setLayoutManager(mLayoutManager);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());

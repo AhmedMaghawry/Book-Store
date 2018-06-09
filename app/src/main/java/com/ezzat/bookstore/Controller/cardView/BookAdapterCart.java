@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.ezzat.bookstore.Model.Book;
 import com.ezzat.bookstore.Model.Cart;
+import com.ezzat.bookstore.Model.User;
 import com.ezzat.bookstore.R;
 
 public class BookAdapterCart extends RecyclerView.Adapter<cartHolder> {

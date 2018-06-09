@@ -1,31 +1,24 @@
 package com.ezzat.bookstore.View;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ezzat.bookstore.Controller.HttpJsonParser;
-import com.ezzat.bookstore.Controller.cardView.BookAdapterCard;
-import com.ezzat.bookstore.Controller.cardView.BookAdapterCart;
-import com.ezzat.bookstore.Model.Book;
-import com.ezzat.bookstore.Model.Cart;
+import com.ezzat.bookstore.Model.User;
 import com.ezzat.bookstore.R;
 
 import org.json.JSONObject;
@@ -33,59 +26,104 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Cart_Activity extends AppCompatActivity {
+public class Profile extends AppCompatActivity {
 
     Toolbar toolbar;
-    private RecyclerView recyclerView;
-    private BookAdapterCart mAdapterCard;
+    int priority;
     private ImageView logout, profile, promote, back, makeOrder, confirmOrder, statistics;
-    private Button confirm;
-    private TextView cost;
-    Cart cart;
-    int start = 0;
-    int end = 0;
-
-    private ProgressDialog pDialog;
-    private Cart_Activity self;
+    private TextView userName, firstN, lastN, password, email, phone, ship;
+    private Button editFirst, editLast, editPass, editEmail, editPhone, editShip,confirm, cancel;
+    private User user;
+    private Profile self;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart);
-        confirm = findViewById(R.id.con);
-        cost = findViewById(R.id.cost);
+        setContentView(R.layout.activity_profile);
         self = this;
-        cart = (Cart) getIntent().getSerializableExtra("cart");
+        user = (User) getIntent().getSerializableExtra("user");
+        priority = getIntent().getIntExtra("pri",0);
+        setup_toolbar();
+        setup_views();
+        setup_buttons();
+    }
+
+    private void setup_buttons() {
+        editPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boilr(phone);
+            }
+        });
+
+        editShip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boilr(ship);
+            }
+        });
+
+        editPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boilr(password);
+            }
+        });
+
+        editLast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boilr(lastN);
+            }
+        });
+
+        editFirst.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boilr(firstN);
+            }
+        });
+
+        editEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boilr(email);
+            }
+        });
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showForms();
+                new Profile.updateUser().execute(new String[]{userName.getText().toString(), password.getText().toString()
+                        , firstN.getText().toString(), lastN.getText().toString(), email.getText().toString(),
+                        phone.getText().toString(), ship.getText().toString()});
             }
         });
-        setup_toolbar();
-        recyclerView = findViewById(R.id.rv);
-        mAdapterCard = new BookAdapterCart(0, cart);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapterCard);
-        cost.setText(getTotalCost(cart)+"");
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Profile.this, HomeActivity.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
+                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
+                startActivity(intent);
+            }
+        });
     }
 
-    private void showForms() {
+    void boilr(final TextView te) {
         LayoutInflater li = LayoutInflater.from(self);
-        View promptsView = li.inflate(R.layout.dialog_layout, null);
+        View promptsView = li.inflate(R.layout.edit_dialog_layout, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                this);
+                self);
 
         // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
 
-        final EditText cardNum = (EditText) promptsView
-                .findViewById(R.id.credit);
-        final EditText exp = (EditText) promptsView
-                .findViewById(R.id.date);
+        final EditText editText = (EditText) promptsView
+                .findViewById(R.id.edit);
 
         // set dialog message
         alertDialogBuilder
@@ -93,12 +131,7 @@ public class Cart_Activity extends AppCompatActivity {
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                end = cart.books.size();
-                                startExe();
-                                for (int i = 0; i < cart.books.size(); i++) {
-                                    new confirmOrders().execute(new String[]{cart.books.get(i).getISBN() + "", cart.quan.get(i)});
-                                    start++;
-                                }
+                                te.setText(editText.getText().toString());
                             }
                         })
                 .setNegativeButton("Cancel",
@@ -115,14 +148,45 @@ public class Cart_Activity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private int getTotalCost(Cart cart) {
-        int total = 0;
-        for (int i =0; i < cart.books.size(); i++) {
-            total += cart.books.get(i).getPrice() * Integer.parseInt(cart.quan.get(i));
-        }
-        return total;
+    private void setup_views() {
+        userName = findViewById(R.id.username);
+        firstN = findViewById(R.id.fiN);
+        lastN = findViewById(R.id.laN);
+        password = findViewById(R.id.pass);
+        email = findViewById(R.id.email);
+        phone = findViewById(R.id.phone);
+        ship = findViewById(R.id.shi);
+        editPass = findViewById(R.id.editpass);
+        editPhone = findViewById(R.id.editphone);
+        editShip = findViewById(R.id.editshi);
+        editLast = findViewById(R.id.editla);
+        editFirst= findViewById(R.id.editfi);
+        editEmail = findViewById(R.id.editemail);
+        cancel = findViewById(R.id.cancel);
+        confirm = findViewById(R.id.confirm);
+        userName.setText(user.getUserName());
+        firstN.setText(user.getFirstN()+"");
+        lastN.setText(user.getLastN());
+        password.setText(user.getPassword()+"");
+        email.setText(user.getEmail());
+        phone.setText(user.getPhone()+"");
+        ship.setText(user.getShip());
+            editEmail.setVisibility(View.VISIBLE);
+            editFirst.setVisibility(View.VISIBLE);
+            editLast.setVisibility(View.VISIBLE);
+            editShip.setVisibility(View.VISIBLE);
+            editPass.setVisibility(View.VISIBLE);
+            editPhone.setVisibility(View.VISIBLE);
     }
 
+    private boolean checkNum(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 
     public void setup_toolbar() {
         setSupportActionBar(toolbar);
@@ -134,14 +198,21 @@ public class Cart_Activity extends AppCompatActivity {
         makeOrder = toolbar.findViewById(R.id.placeOrders);
         confirmOrder = toolbar.findViewById(R.id.confirmOrders);
         statistics = toolbar.findViewById(R.id.statistics);
+        if (priority == 0) {
             promote.setVisibility(View.GONE);
             makeOrder.setVisibility(View.GONE);
             confirmOrder.setVisibility(View.GONE);
             statistics.setVisibility(View.GONE);
+        } else {
+            promote.setVisibility(View.VISIBLE);
+            makeOrder.setVisibility(View.VISIBLE);
+            confirmOrder.setVisibility(View.VISIBLE);
+            statistics.setVisibility(View.VISIBLE);
+        }
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Cart_Activity.this, WelcomeActivity.class);
+                Intent intent = new Intent(Profile.this, WelcomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -149,8 +220,8 @@ public class Cart_Activity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Cart_Activity.this, Profile.class);
-                intent.putExtra("cart", cart);
+                Intent intent = new Intent(Profile.this, Profile.class);
+                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
                 intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
@@ -160,7 +231,7 @@ public class Cart_Activity extends AppCompatActivity {
         promote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Cart_Activity.this, Promote.class);
+                Intent intent = new Intent(Profile.this, Promote.class);
                 intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
                 intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
@@ -171,7 +242,7 @@ public class Cart_Activity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Cart_Activity.this, HomeActivity.class);
+                Intent intent = new Intent(Profile.this, HomeActivity.class);
                 intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
                 intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
@@ -182,7 +253,7 @@ public class Cart_Activity extends AppCompatActivity {
         makeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Cart_Activity.this, AddOrder.class);
+                Intent intent = new Intent(Profile.this, AddOrder.class);
                 intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
                 intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
@@ -193,7 +264,7 @@ public class Cart_Activity extends AppCompatActivity {
         confirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Cart_Activity.this, ConfirmOrder.class);
+                Intent intent = new Intent(Profile.this, ConfirmOrder.class);
                 intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
                 intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
@@ -204,7 +275,7 @@ public class Cart_Activity extends AppCompatActivity {
         statistics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Cart_Activity.this, Statistics.class);
+                Intent intent = new Intent(Profile.this, Statistics.class);
                 intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
                 intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
@@ -213,8 +284,7 @@ public class Cart_Activity extends AppCompatActivity {
         });
     }
 
-
-    public class confirmOrders extends AsyncTask<String, Void, Void> {
+    public class updateUser extends AsyncTask<String, Void, Void> {
 
         HttpJsonParser jParser = new HttpJsonParser();
         private boolean finished = true;
@@ -225,11 +295,24 @@ public class Cart_Activity extends AppCompatActivity {
         protected Void doInBackground(String... args) {
             // Building Parameters
             Map<String, String> params = new HashMap<>();
-            params.put("isbn", args[0]);
-            params.put("quantity", args[1]);
-            // getting JSON string from URL
-            JSONObject json = jParser.makeHttpRequest("http://10.42.0.1:8085/Android_DB_connect/confirmCart.php", "GET", params);
+            params.put("username", args[0]);
+            params.put("password", args[1]);
+            params.put("fiName", args[2]);
+            params.put("laName", args[3]);
+            params.put("email", args[4]);
+            params.put("phone", args[5]);
+            params.put("shi", args[6]);
+            JSONObject json;
+            if (priority == 0) {
+                // getting JSON string from URL
+                json = jParser.makeHttpRequest("http://10.42.0.1:8085/Android_DB_connect/updateUser.php", "GET", params);
+            } else {
+                Log.i("newD", args[2]);
+                // getting JSON string from URL
+                json = jParser.makeHttpRequest("http://10.42.0.1:8085/Android_DB_connect/updateManager.php", "GET", params);
+            }
             try {
+                user = new User(args[0],args[2], args[3], args[1], args[4], args[5], args[6]);
                 int success = json.getInt("success");
                 if (success == 0) {
                     finished = false;
@@ -248,23 +331,13 @@ public class Cart_Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if (start == end && finished) {
-                pDialog.dismiss();
-                Intent intent = new Intent(Cart_Activity.this, HomeActivity.class);
+            if (finished) {
+                Intent intent = new Intent(Profile.this, HomeActivity.class);
                 intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
-                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("user", user);
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
         }
-    }
-
-
-    public void startExe() {
-        pDialog = new ProgressDialog(Cart_Activity.this);
-        pDialog.setMessage("Confirming. Please wait...");
-        pDialog.setIndeterminate(false);
-        pDialog.setCancelable(false);
-        pDialog.show();
     }
 }

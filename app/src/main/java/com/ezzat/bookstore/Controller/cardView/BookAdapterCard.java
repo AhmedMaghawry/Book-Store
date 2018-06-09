@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.ezzat.bookstore.Model.Book;
 import com.ezzat.bookstore.Model.Cart;
+import com.ezzat.bookstore.Model.User;
 import com.ezzat.bookstore.R;
 import com.ezzat.bookstore.View.BookInfo;
 
@@ -25,11 +26,13 @@ public class BookAdapterCard extends RecyclerView.Adapter<cardHolder> {
     View itemView;
     int priotity;
     Cart ca;
+    User user;
 
-    public BookAdapterCard(List<Book> books, int priotity, Cart ca) {
+    public BookAdapterCard(List<Book> books, int priotity, Cart ca, User user) {
         this.books = books;
         this.priotity = priotity;
         this.ca = ca;
+        this.user = user;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class BookAdapterCard extends RecyclerView.Adapter<cardHolder> {
                 bookInfo.putExtra("book", book);
                 bookInfo.putExtra("pri", priotity);
                 bookInfo.putExtra("cart", ca);
+                bookInfo.putExtra("user", user);
                 itemView.getContext().startActivity(bookInfo);
             }
         });

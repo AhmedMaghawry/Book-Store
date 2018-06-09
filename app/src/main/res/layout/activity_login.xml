@@ -26,7 +26,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"
+        android:id="@+id/username"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -51,13 +52,6 @@
         android:id="@+id/login"
         android:textColor="@color/cardview_light_background"
         android:background="@color/money"
-        android:layout_margin="10dp"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Skip"
-        android:id="@+id/skip"
         android:layout_margin="10dp"/>
 
 </LinearLayout>
