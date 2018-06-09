@@ -290,7 +290,8 @@
             android:textSize="20sp"
             android:text="Order"
             android:background="@color/money"
-            android:textColor="@color/cardview_light_background" />
+            android:textColor="@color/cardview_light_background"
+            android:visibility="visible"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -299,7 +300,7 @@
             android:id="@+id/admin">
             <Button
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:id="@+id/cancel"
@@ -307,7 +308,7 @@
                 android:text="Cancel" />
             <Button
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/confirm"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
@@ -316,5 +317,13 @@
                 android:background="@color/money"
                 android:textColor="@color/cardview_light_background"/>
         </LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/reg"
+            android:textColor="@color/cardview_light_background"
+            android:text="Make Order"
+            android:id="@+id/makeO"
+            android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>

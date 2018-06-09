@@ -29,7 +29,7 @@ public class AddBook extends AppCompatActivity {
 
     Toolbar toolbar;
     int priority;
-    private ImageView logout, profile, promote, back, makeOrder, confirmOrder, statistics;
+    private ImageView logout, profile, promote, back, confirmOrder, statistics;
     private Button add;
     private EditText isbn, title, publisher, year, price, cate, num, min;
     private User user;
@@ -85,17 +85,14 @@ public class AddBook extends AppCompatActivity {
         profile = toolbar.findViewById(R.id.profile);
         promote = toolbar.findViewById(R.id.promote);
         back = toolbar.findViewById(R.id.back);
-        makeOrder = toolbar.findViewById(R.id.placeOrders);
         confirmOrder = toolbar.findViewById(R.id.confirmOrders);
         statistics = toolbar.findViewById(R.id.statistics);
         if (priority == 0) {
             promote.setVisibility(View.GONE);
-            makeOrder.setVisibility(View.GONE);
             confirmOrder.setVisibility(View.GONE);
             statistics.setVisibility(View.GONE);
         } else {
             promote.setVisibility(View.VISIBLE);
-            makeOrder.setVisibility(View.VISIBLE);
             confirmOrder.setVisibility(View.VISIBLE);
             statistics.setVisibility(View.VISIBLE);
         }
@@ -133,17 +130,6 @@ public class AddBook extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AddBook.this, HomeActivity.class);
-                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
-                intent.putExtra("user", getIntent().getSerializableExtra("user"));
-                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
-                startActivity(intent);
-            }
-        });
-
-        makeOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AddBook.this, AddOrder.class);
                 intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
                 intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));

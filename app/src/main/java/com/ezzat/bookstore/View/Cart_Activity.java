@@ -38,7 +38,7 @@ public class Cart_Activity extends AppCompatActivity {
     Toolbar toolbar;
     private RecyclerView recyclerView;
     private BookAdapterCart mAdapterCard;
-    private ImageView logout, profile, promote, back, makeOrder, confirmOrder, statistics;
+    private ImageView logout, profile, promote, back, confirmOrder, statistics;
     private Button confirm;
     private TextView cost;
     Cart cart;
@@ -131,11 +131,9 @@ public class Cart_Activity extends AppCompatActivity {
         profile = toolbar.findViewById(R.id.profile);
         promote = toolbar.findViewById(R.id.promote);
         back = toolbar.findViewById(R.id.back);
-        makeOrder = toolbar.findViewById(R.id.placeOrders);
         confirmOrder = toolbar.findViewById(R.id.confirmOrders);
         statistics = toolbar.findViewById(R.id.statistics);
             promote.setVisibility(View.GONE);
-            makeOrder.setVisibility(View.GONE);
             confirmOrder.setVisibility(View.GONE);
             statistics.setVisibility(View.GONE);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -172,17 +170,6 @@ public class Cart_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Cart_Activity.this, HomeActivity.class);
-                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
-                intent.putExtra("user", getIntent().getSerializableExtra("user"));
-                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
-                startActivity(intent);
-            }
-        });
-
-        makeOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Cart_Activity.this, AddOrder.class);
                 intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
                 intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));

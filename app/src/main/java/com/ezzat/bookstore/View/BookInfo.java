@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +32,10 @@ public class BookInfo extends AppCompatActivity {
 
     Toolbar toolbar;
     int priority;
-    private ImageView logout, profile, promote, back, makeOrder, confirmOrder, statistics;
+    private ImageView logout, profile, promote, back, confirmOrder, statistics;
     private TextView title, isbn, publiser, year, cat, price, author, vv, min, num;
     private EditText quan;
-    private Button order, editTitle, editpub, editauth, edityear, editcat, editprice,confirm, cancel, editmin, editnum;
+    private Button order, editTitle, editpub, editauth, edityear, editcat, editprice,confirm, cancel, editmin, editnu, makeO;
     LinearLayout admin, admin2, admin3;
     private Book book;
     private BookInfo self;
@@ -123,6 +124,21 @@ public class BookInfo extends AppCompatActivity {
             }
         });
 
+        editmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boilr(min);
+            }
+        });
+
+        editnu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boilr(num);
+            }
+        });
+
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,6 +156,13 @@ public class BookInfo extends AppCompatActivity {
                 intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
+            }
+        });
+
+        makeO.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               boilr();
             }
         });
     }
@@ -180,6 +203,46 @@ public class BookInfo extends AppCompatActivity {
         alertDialog.show();
     }
 
+    void boilr() {
+        LayoutInflater li = LayoutInflater.from(self);
+        View promptsView = li.inflate(R.layout.edit_dialog_layout, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                self);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText editText = (EditText) promptsView
+                .findViewById(R.id.edit);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        editText.setVisibility(View.GONE);
+        TextView textView = promptsView.findViewById(R.id.tv);
+        textView.setText("Are You Sure ?");
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                new makeOrder().execute(new String[]{isbn.getText().toString(), min.getText().toString()});
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
     private void setup_views() {
         title = findViewById(R.id.title);
         isbn = findViewById(R.id.isbn);
@@ -193,7 +256,8 @@ public class BookInfo extends AppCompatActivity {
         num = findViewById(R.id.num);
         min = findViewById(R.id.min);
         editmin = findViewById(R.id.editmin);
-        editnum = findViewById(R.id.editnum);
+        makeO = findViewById(R.id.makeO);
+        editnu = findViewById(R.id.editnum);
         title.setText(book.getTitle());
         isbn.setText(book.getISBN()+"");
         publiser.setText(book.getPublisher());
@@ -229,6 +293,7 @@ public class BookInfo extends AppCompatActivity {
             admin.setVisibility(View.GONE);
             admin2.setVisibility(View.GONE);
             admin3.setVisibility(View.GONE);
+            makeO.setVisibility(View.GONE);
         } else {
             edityear.setVisibility(View.VISIBLE);
             editTitle.setVisibility(View.VISIBLE);
@@ -242,6 +307,7 @@ public class BookInfo extends AppCompatActivity {
             admin.setVisibility(View.VISIBLE);
             admin2.setVisibility(View.VISIBLE);
             admin3.setVisibility(View.VISIBLE);
+            makeO.setVisibility(View.VISIBLE);
         }
     }
 
@@ -261,17 +327,14 @@ public class BookInfo extends AppCompatActivity {
         profile = toolbar.findViewById(R.id.profile);
         promote = toolbar.findViewById(R.id.promote);
         back = toolbar.findViewById(R.id.back);
-        makeOrder = toolbar.findViewById(R.id.placeOrders);
         confirmOrder = toolbar.findViewById(R.id.confirmOrders);
         statistics = toolbar.findViewById(R.id.statistics);
         if (priority == 0) {
             promote.setVisibility(View.GONE);
-            makeOrder.setVisibility(View.GONE);
             confirmOrder.setVisibility(View.GONE);
             statistics.setVisibility(View.GONE);
         } else {
             promote.setVisibility(View.VISIBLE);
-            makeOrder.setVisibility(View.VISIBLE);
             confirmOrder.setVisibility(View.VISIBLE);
             statistics.setVisibility(View.VISIBLE);
         }
@@ -310,17 +373,6 @@ public class BookInfo extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(BookInfo.this, HomeActivity.class);
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
-                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
-                intent.putExtra("user", getIntent().getSerializableExtra("user"));
-                intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
-                startActivity(intent);
-            }
-        });
-
-        makeOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(BookInfo.this, AddOrder.class);
                 intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
                 intent.putExtra("user", getIntent().getSerializableExtra("user"));
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
@@ -398,6 +450,38 @@ public class BookInfo extends AppCompatActivity {
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
+        }
+    }
+
+    public class makeOrder extends AsyncTask<String, Void, Void> {
+
+        HttpJsonParser jParser = new HttpJsonParser();
+        private boolean finished = true;
+
+        /**
+         * getting All products from url
+         * */
+        protected Void doInBackground(String... args) {
+            // Building Parameters
+            Map<String, String> params = new HashMap<>();
+            params.put("isbn", args[0]);
+            params.put("min", args[1]);
+            // getting JSON string from URL
+            JSONObject json = jParser.makeHttpRequest("http://10.42.0.1:8085/Android_DB_connect/placeOrder.php", "GET", params);
+            try {
+                int success = json.getInt("success");
+                if (success == 0) {
+                    finished = false;
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(self, "Error Happened", Toast.LENGTH_SHORT);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }

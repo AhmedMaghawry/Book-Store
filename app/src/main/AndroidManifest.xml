@@ -43,8 +43,6 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".View.Promote"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".View.AddOrder"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".View.ConfirmOrder"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".View.Statistics"
