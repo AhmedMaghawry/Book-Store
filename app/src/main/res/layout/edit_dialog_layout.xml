@@ -21,4 +21,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/edit"/>
 
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/money"
+        android:id="@+id/spin"
+        android:visibility="gone"/>
+
 </LinearLayout>

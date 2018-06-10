@@ -27,12 +27,14 @@ public class BookAdapterCard extends RecyclerView.Adapter<cardHolder> {
     int priotity;
     Cart ca;
     User user;
+    boolean hide;
 
-    public BookAdapterCard(List<Book> books, int priotity, Cart ca, User user) {
+    public BookAdapterCard(List<Book> books, int priotity, Cart ca, User user, boolean hide) {
         this.books = books;
         this.priotity = priotity;
         this.ca = ca;
         this.user = user;
+        this.hide = hide;
     }
 
     @Override
@@ -53,12 +55,14 @@ public class BookAdapterCard extends RecyclerView.Adapter<cardHolder> {
         holder.all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent bookInfo = new Intent(itemView.getContext(), BookInfo.class);
-                bookInfo.putExtra("book", book);
-                bookInfo.putExtra("pri", priotity);
-                bookInfo.putExtra("cart", ca);
-                bookInfo.putExtra("user", user);
-                itemView.getContext().startActivity(bookInfo);
+                if (!hide) {
+                    Intent bookInfo = new Intent(itemView.getContext(), BookInfo.class);
+                    bookInfo.putExtra("book", book);
+                    bookInfo.putExtra("pri", priotity);
+                    bookInfo.putExtra("cart", ca);
+                    bookInfo.putExtra("user", user);
+                    itemView.getContext().startActivity(bookInfo);
+                }
             }
         });
     }

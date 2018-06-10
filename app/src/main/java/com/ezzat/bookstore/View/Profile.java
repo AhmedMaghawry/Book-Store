@@ -124,6 +124,7 @@ public class Profile extends AppCompatActivity {
 
         final EditText editText = (EditText) promptsView
                 .findViewById(R.id.edit);
+        editText.setLines(1);
 
         // set dialog message
         alertDialogBuilder

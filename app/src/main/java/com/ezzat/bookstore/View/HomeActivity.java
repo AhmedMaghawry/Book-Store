@@ -10,11 +10,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -50,8 +54,12 @@ public class HomeActivity extends AppCompatActivity {
 
     Button backy, next;
 
+    ImageButton search;
+    EditText seaVal;
+
     // url to get all products list
     private static String url_all_products = "http://10.42.0.1:8085/Android_DB_connect/getBooks.php";
+    private static String url_some_products = "http://10.42.0.1:8085/Android_DB_connect/searchBooks.php";
 
     private Spinner spinner;
     private static final String[]paths = {"ISBN", "TITLE", "Category", "Author", "Publisher"};
@@ -90,6 +98,14 @@ public class HomeActivity extends AppCompatActivity {
         }
         con = this;
         setup_toolbar();
+        setup_Views();
+        new LoadAllProducts().execute(limit+"");
+    }
+
+    private void setup_Views() {
+        search = findViewById(R.id.search);
+        seaVal = findViewById(R.id.search_ev);
+        seaVal.setLines(1);
         add = findViewById(R.id.add);
         cart = findViewById(R.id.cart);
         if (priority == 0) {
@@ -141,8 +157,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        // Loading products in Background Thread
-        new LoadAllProducts().execute(limit+"");
 
         backy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,14 +176,45 @@ public class HomeActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    limit += 100;
-                    temp = new ArrayList<>(books);
-                    books.clear();
-                    new LoadAllProducts().execute(limit+"");
-                    mAdapterCard.notifyDataSetChanged();
+                limit += 100;
+                temp = new ArrayList<>(books);
+                books.clear();
+                new LoadAllProducts().execute(limit+"");
+                mAdapterCard.notifyDataSetChanged();
             }
         });
 
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (seaVal.getText().toString() != "") {
+                    books.clear();
+                    new LoadSearchedProducts().execute(getParams(seaVal.getText().toString(), spinner.getSelectedItem().toString()));
+                    mAdapterCard.notifyDataSetChanged();
+                } else {
+                    books.clear();
+                    new LoadAllProducts().execute("0");
+                    mAdapterCard.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    private String[] getParams(String val, String type) {
+        switch (type) {
+            case "ISBN" :
+                return new String[]{val, "","","",""};
+            case "TITLE":
+                return new String[]{"-1", val,"","",""};
+            case "Category":
+                return new String[]{"-1", "",val,"",""};
+            case "Author":
+                return new String[]{"-1", "","",val,""};
+            case "Publisher":
+                return new String[]{"-1", "","","",val};
+            default:
+                return new String[]{"-1", "","","",""};
+        }
     }
 
     public void setup_toolbar() {
@@ -337,7 +382,93 @@ public class HomeActivity extends AppCompatActivity {
                 public void run() {
                     if (books.size() != 0) {
                         recyclerView = findViewById(R.id.rv);
-                        mAdapterCard = new BookAdapterCard(books, priority, carty, (User)getIntent().getSerializableExtra("user"));
+                        mAdapterCard = new BookAdapterCard(books, priority, carty, (User)getIntent().getSerializableExtra("user"), false);
+                        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(con, 2);
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(mAdapterCard);
+                    } else {
+                        limit -= 100;
+                    }
+                }
+            });
+        }
+    }
+
+    class LoadSearchedProducts extends AsyncTask<String, String, String> {
+
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(HomeActivity.this);
+            pDialog.setMessage("Loading Books. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        /**
+         * getting All products from url
+         * */
+        protected String doInBackground(String... args) {
+            // Building Parameters
+            Map<String, String> params = new HashMap<>();
+            params.put("isbn", args[0]);
+            params.put("ti", args[1]);
+            params.put("pub", args[2]);
+            params.put("auth", args[3]);
+            params.put("cat", args[4]);
+            // getting JSON string from URL
+            JSONObject json = jParser.makeHttpRequest(url_some_products, "GET", params);
+
+            try {
+                // Checking for SUCCESS TAG
+                int success = json.getInt(TAG_SUCCESS);
+
+                if (success == 1) {
+                    // products found
+                    // Getting Array of Products
+                    booksArr = json.getJSONArray(TAG_BOOKS);
+
+                    // looping through All Products
+                    for (int i = 0; i < booksArr.length(); i++) {
+                        JSONObject c = booksArr.getJSONObject(i);
+                        int isb = c.getInt(ISBN);
+                        String tit = c.getString(title);
+                        String pub = c.getString(publisher);
+                        String year = c.getString(pub_year);
+                        int pri = c.getInt(price);
+                        String cate = c.getString(category);
+                        int num = c.getInt(no_copies);
+                        int mini = c.getInt(min_quantity);
+                        String[] au = new String[]{};
+                        books.add(new Book(isb, tit, pub, au, year, pri, cate, num, mini));
+                    }
+                } else  {
+                    books = temp;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after getting all products
+            pDialog.dismiss();
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    if (books.size() != 0) {
+                        recyclerView = findViewById(R.id.rv);
+                        mAdapterCard = new BookAdapterCard(books, priority, carty, (User)getIntent().getSerializableExtra("user"), false);
                         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(con, 2);
                         recyclerView.setLayoutManager(mLayoutManager);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());

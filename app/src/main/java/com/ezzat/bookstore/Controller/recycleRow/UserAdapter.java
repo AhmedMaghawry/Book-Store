@@ -21,9 +21,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserHolder> {
 
     ArrayList<User> users;
     ViewGroup parent;
+    boolean hide;
 
-    public UserAdapter(ArrayList<User> users) {
+    public UserAdapter(ArrayList<User> users, boolean hide) {
         this.users = users;
+        this.hide = hide;
     }
 
     @NonNull
@@ -31,7 +33,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserHolder> {
     public UserHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_user, parent, false);
         this.parent = parent;
-        return new UserHolder(view);
+        return new UserHolder(view, hide);
     }
 
     @Override

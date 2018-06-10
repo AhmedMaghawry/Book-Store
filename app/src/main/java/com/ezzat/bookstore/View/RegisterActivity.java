@@ -18,6 +18,8 @@ import com.ezzat.bookstore.R;
 
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,12 +36,19 @@ public class RegisterActivity extends AppCompatActivity {
         self = this;
         reg = findViewById(R.id.reg);
         fi = findViewById(R.id.first);
+        fi.setLines(1);
         la = findViewById(R.id.last);
+        la.setLines(1);
         em = findViewById(R.id.email);
+        em.setLines(1);
         pass = findViewById(R.id.pass);
+        pass.setLines(1);
         usr = findViewById(R.id.user);
+        usr.setLines(1);
         ph = findViewById(R.id.phone);
+        ph.setLines(1);
         sh = findViewById(R.id.address);
+        sh.setLines(1);
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

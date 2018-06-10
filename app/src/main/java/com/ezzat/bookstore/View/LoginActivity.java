@@ -45,7 +45,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         self = this;
         userNameEd = findViewById(R.id.username);
+        userNameEd.setLines(1);
         passwordEd = findViewById(R.id.password);
+        passwordEd.setLines(1);
         priority = getIntent().getIntExtra("pri", 0);
         login = findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (success == 1) {
                     userArr = json.getJSONArray("user");
-
+                        finished = true;
                         JSONObject c = userArr.getJSONObject(0);
                         String username = c.getString("username");
                         String password = c.getString("password");
@@ -109,11 +111,6 @@ public class LoginActivity extends AppCompatActivity {
                         user = new User(username, firstN, lastN, password, email, phone, ship);
                 } else  {
                     finished = false;
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(self, "Error Happened", Toast.LENGTH_SHORT);
-                        }
-                    });
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -133,6 +130,14 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra("user", user);
                 intent.putExtra("pri", priority);
                 startActivity(intent);
+            } else  {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(self, "Error Happened", Toast.LENGTH_SHORT);
+                        userNameEd.setText("");
+                        passwordEd.setText("");
+                    }
+                });
             }
         }
     }

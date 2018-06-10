@@ -26,6 +26,7 @@ import com.ezzat.bookstore.Controller.cardView.BookAdapterCard;
 import com.ezzat.bookstore.Controller.cardView.BookAdapterCart;
 import com.ezzat.bookstore.Model.Book;
 import com.ezzat.bookstore.Model.Cart;
+import com.ezzat.bookstore.Model.User;
 import com.ezzat.bookstore.R;
 
 import org.json.JSONObject;
@@ -84,8 +85,10 @@ public class Cart_Activity extends AppCompatActivity {
 
         final EditText cardNum = (EditText) promptsView
                 .findViewById(R.id.credit);
+        cardNum.setLines(1);
         final EditText exp = (EditText) promptsView
                 .findViewById(R.id.date);
+        exp.setLines(1);
 
         // set dialog message
         alertDialogBuilder
@@ -96,7 +99,7 @@ public class Cart_Activity extends AppCompatActivity {
                                 end = cart.books.size();
                                 startExe();
                                 for (int i = 0; i < cart.books.size(); i++) {
-                                    new confirmOrders().execute(new String[]{cart.books.get(i).getISBN() + "", cart.quan.get(i)});
+                                    new confirmOrders().execute(new String[]{cart.books.get(i).getISBN() + "", cart.quan.get(i), i+""});
                                     start++;
                                 }
                             }
@@ -205,7 +208,7 @@ public class Cart_Activity extends AppCompatActivity {
 
         HttpJsonParser jParser = new HttpJsonParser();
         private boolean finished = true;
-
+        int index;
         /**
          * getting All products from url
          * */
@@ -214,6 +217,7 @@ public class Cart_Activity extends AppCompatActivity {
             Map<String, String> params = new HashMap<>();
             params.put("isbn", args[0]);
             params.put("quantity", args[1]);
+            index = Integer.parseInt(args[2]);
             // getting JSON string from URL
             JSONObject json = jParser.makeHttpRequest("http://10.42.0.1:8085/Android_DB_connect/confirmCart.php", "GET", params);
             try {
@@ -236,10 +240,11 @@ public class Cart_Activity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if (start == end && finished) {
+                User u = (User) getIntent().getSerializableExtra("user");
+                new addStat().execute(new String[]{cart.books.get(index).getISBN()+"", u.getUserName(), (cart.books.get(index).getPrice() * Integer.parseInt(cart.quan.get(index))) + "", "2018-06-12"});
                 pDialog.dismiss();
                 Intent intent = new Intent(Cart_Activity.this, HomeActivity.class);
-                intent.putExtra("cart", getIntent().getSerializableExtra("cart"));
-                intent.putExtra("user", getIntent().getSerializableExtra("user"));
+                intent.putExtra("user", u);
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
@@ -253,5 +258,37 @@ public class Cart_Activity extends AppCompatActivity {
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
         pDialog.show();
+    }
+
+    public class addStat extends AsyncTask<String, Void, Void> {
+
+        HttpJsonParser jParser = new HttpJsonParser();
+        private boolean finished = true;
+
+        /**
+         * getting All products from url
+         * */
+        protected Void doInBackground(String... args) {
+            Map<String, String> params = new HashMap<>();
+            params.put("isbn", args[0]);
+            params.put("username", args[1]);
+            params.put("total", args[2]);
+            params.put("date", args[3]);
+            JSONObject json = jParser.makeHttpRequest("http://10.42.0.1:8085/Android_DB_connect/addStatistics.php", "GET", params);
+            try {
+                int success = json.getInt("success");
+                if (success == 0) {
+                    finished = false;
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(self, "Error Happened", Toast.LENGTH_SHORT);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }

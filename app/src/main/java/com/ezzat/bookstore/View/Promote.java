@@ -201,7 +201,7 @@ public class Promote extends AppCompatActivity {
                 public void run() {
                         recyclerView = findViewById(R.id.rv);
                         Log.i("dodo", users.size()+"");
-                        UserAdapter mAdapterUser = new UserAdapter(users);
+                        UserAdapter mAdapterUser = new UserAdapter(users, false);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(self);
                         recyclerView.setLayoutManager(mLayoutManager);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());

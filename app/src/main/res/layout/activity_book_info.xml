@@ -42,219 +42,227 @@
         android:orientation="vertical"
         android:layout_margin="10dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <LinearLayout android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="2"
             android:layout_height="wrap_content"
             android:text="Book ISBN : "
             android:textColor="@color/cardview_dark_background"
             android:textSize="20sp"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="2"
             android:layout_height="wrap_content"
             android:id="@+id/isbn"
             tools:text="DDDD"
             android:textColor="@color/colorPrimary"
-            android:textSize="15sp"
-            android:layout_marginLeft="60dp"/>
+            android:textSize="15sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <LinearLayout android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:text="Book Publisher : "
                 android:textColor="@color/cardview_dark_background"
-                android:textSize="20sp"/>
+                android:textSize="15sp"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:id="@+id/pub"
                 tools:text="DDDD"
                 android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
-                android:layout_marginLeft="20dp"/>
+                android:textSize="15sp"/>
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="30dp"
                 android:background="@color/colorPrimary"
                 android:text="Edit"
                 android:id="@+id/editpub"
-                android:gravity="center"
-                android:layout_marginLeft="30dp"/>
+                android:gravity="center" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <LinearLayout android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:text="Book Author : "
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="20sp"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:id="@+id/auth"
                 tools:text="DDDD"
                 android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
-                android:layout_marginLeft="45dp"/>
+                android:textSize="15sp" />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="30dp"
                 android:background="@color/colorPrimary"
                 android:text="Edit"
                 android:id="@+id/editauth"
-                android:gravity="center"
-                android:layout_marginLeft="30dp"/>
+                android:gravity="center" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <LinearLayout android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:text="Book Year : "
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="20sp"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:id="@+id/year"
                 android:textColor="@color/colorPrimary"
                 tools:text="DDDD"
-                android:textSize="15sp"
-                android:layout_marginLeft="65dp"/>
+                android:textSize="15sp" />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="30dp"
                 android:background="@color/colorPrimary"
                 android:text="Edit"
                 android:id="@+id/edityear"
-                android:gravity="center"
-                android:layout_marginLeft="30dp"/>
+                android:gravity="center" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <LinearLayout android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:text="Book Category : "
                 android:textColor="@color/cardview_dark_background"
-                android:textSize="20sp"/>
+                android:textSize="15sp"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:id="@+id/cat"
                 android:textColor="@color/colorPrimary"
                 tools:text="DDDD"
-                android:textSize="15sp"
-                android:layout_marginLeft="25dp"/>
+                android:textSize="15sp" />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="30dp"
                 android:background="@color/colorPrimary"
                 android:text="Edit"
                 android:id="@+id/editcat"
-                android:gravity="center"
-                android:layout_marginLeft="30dp"/>
+                android:gravity="center" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <LinearLayout android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:text="Book Price : "
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="20sp"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:id="@+id/price"
                 android:textColor="@color/colorPrimary"
                 tools:text="DDDD"
-                android:textSize="15sp"
-                android:layout_marginLeft="60dp"/>
+                android:textSize="15sp" />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="30dp"
                 android:background="@color/colorPrimary"
                 android:text="Edit"
                 android:id="@+id/editprice"
-                android:gravity="center"
-                android:layout_marginLeft="30dp"/>
+                android:gravity="center" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <LinearLayout android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/admin2">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:text="Book Numbers : "
                 android:textColor="@color/cardview_dark_background"
-                android:textSize="20sp"/>
+                android:textSize="15sp"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:id="@+id/num"
                 android:textColor="@color/colorPrimary"
                 tools:text="DDDD"
-                android:textSize="15sp"
-                android:layout_marginLeft="25dp"/>
+                android:textSize="15sp" />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="30dp"
                 android:background="@color/colorPrimary"
                 android:text="Edit"
                 android:id="@+id/editnum"
-                android:gravity="center"
-                android:layout_marginLeft="30dp"/>
+                android:gravity="center" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <LinearLayout android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/admin3">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:text="Book Minimum : "
                 android:textColor="@color/cardview_dark_background"
-                android:textSize="20sp"/>
+                android:textSize="15sp"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:id="@+id/min"
                 android:textColor="@color/colorPrimary"
                 tools:text="DDDD"
-                android:textSize="15sp"
-                android:layout_marginLeft="20dp"/>
+                android:textSize="15sp" />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="30dp"
                 android:background="@color/colorPrimary"
                 android:text="Edit"
                 android:id="@+id/editmin"
-                android:gravity="center"
-                android:layout_marginLeft="30dp"/>
+                android:gravity="center" />
         </LinearLayout>
     </LinearLayout>
 
@@ -281,6 +289,7 @@
                 android:id="@+id/count"
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp"
+                android:inputType="number"
                 android:layout_marginLeft="30dp"/>
         </LinearLayout>
         <Button

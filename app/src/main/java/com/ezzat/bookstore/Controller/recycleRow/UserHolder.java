@@ -12,9 +12,13 @@ public class UserHolder extends RecyclerView.ViewHolder {
     TextView name;
     Button promote;
 
-    public UserHolder(View itemView) {
+    public UserHolder(View itemView, boolean hide) {
         super(itemView);
         name = itemView.findViewById(R.id.uName);
         promote = itemView.findViewById(R.id.promote);
+        if (hide){
+            promote.setVisibility(View.GONE);
+        } else
+            promote.setVisibility(View.VISIBLE);
     }
 }

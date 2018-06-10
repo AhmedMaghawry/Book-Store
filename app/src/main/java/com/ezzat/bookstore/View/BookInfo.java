@@ -11,10 +11,13 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +42,7 @@ public class BookInfo extends AppCompatActivity {
     LinearLayout admin, admin2, admin3;
     private Book book;
     private BookInfo self;
+    private static final String[]paths = {"Science", "Art", "Religion", "History", "Geography"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,14 +89,14 @@ public class BookInfo extends AppCompatActivity {
         editcat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boilr(cat);
+                boilrSpinner(cat);
             }
         });
 
         editprice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boilr(price);
+                boilrNum(price);
             }
         });
 
@@ -120,21 +124,21 @@ public class BookInfo extends AppCompatActivity {
         edityear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boilr(year);
+                boilrNum(year);
             }
         });
 
         editmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boilr(min);
+                boilrNum(min);
             }
         });
 
         editnu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boilr(num);
+                boilrNum(num);
             }
         });
 
@@ -167,6 +171,62 @@ public class BookInfo extends AppCompatActivity {
         });
     }
 
+    private void boilrSpinner(final TextView cat) {
+        LayoutInflater li = LayoutInflater.from(self);
+        View promptsView = li.inflate(R.layout.edit_dialog_layout, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                self);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText editText = (EditText) promptsView
+                .findViewById(R.id.edit);
+        editText.setLines(1);
+        final Spinner spinner = promptsView
+                .findViewById(R.id.spin);
+        editText.setVisibility(View.GONE);
+        spinner.setVisibility(View.VISIBLE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(BookInfo.this,
+                R.layout.spinner_layout,paths);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                cat.setText(spinner.getSelectedItem().toString());
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
     void boilr(final TextView te) {
         LayoutInflater li = LayoutInflater.from(self);
         View promptsView = li.inflate(R.layout.edit_dialog_layout, null);
@@ -179,6 +239,45 @@ public class BookInfo extends AppCompatActivity {
 
         final EditText editText = (EditText) promptsView
                 .findViewById(R.id.edit);
+        editText.setLines(1);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                te.setText(editText.getText().toString());
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
+    void boilrNum(final TextView te) {
+        LayoutInflater li = LayoutInflater.from(self);
+        View promptsView = li.inflate(R.layout.edit_dialog_layout, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                self);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText editText = (EditText) promptsView
+                .findViewById(R.id.edit);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        editText.setLines(1);
 
         // set dialog message
         alertDialogBuilder
@@ -217,6 +316,7 @@ public class BookInfo extends AppCompatActivity {
                 .findViewById(R.id.edit);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setVisibility(View.GONE);
+        editText.setLines(1);
         TextView textView = promptsView.findViewById(R.id.tv);
         textView.setText("Are You Sure ?");
 
@@ -282,6 +382,7 @@ public class BookInfo extends AppCompatActivity {
         }
         author.setText(str);
         quan = findViewById(R.id.count);
+        quan.setLines(1);
         order = findViewById(R.id.order);
         if (priority == 0) {
             edityear.setVisibility(View.GONE);

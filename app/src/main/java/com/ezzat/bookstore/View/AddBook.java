@@ -10,9 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +34,12 @@ public class AddBook extends AppCompatActivity {
     int priority;
     private ImageView logout, profile, promote, back, confirmOrder, statistics;
     private Button add;
-    private EditText isbn, title, publisher, year, price, cate, num, min;
+    private EditText isbn, title, publisher, year, price, num, min;
+    private Spinner cate;
     private User user;
     private AddBook self;
+    private static final String[]paths = {"Science", "Art", "Religion", "History", "Geography"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class AddBook extends AppCompatActivity {
                   publisher.getText().toString(),
                   year.getText().toString(),
                   price.getText().toString(),
-                  cate.getText().toString(),
+                  cate.getSelectedItem().toString(),
                   num.getText().toString(),
                   min.getText().toString()
                 };
@@ -69,13 +75,36 @@ public class AddBook extends AppCompatActivity {
     private void setup_views() {
         add = findViewById(R.id.add);
         isbn = findViewById(R.id.isbn);
+        isbn.setLines(1);
         title = findViewById(R.id.title);
+        title.setLines(1);
         publisher = findViewById(R.id.pub);
+        publisher.setLines(1);
         year = findViewById(R.id.year);
+        year.setLines(1);
         price = findViewById(R.id.price);
+        price.setLines(1);
         cate = findViewById(R.id.cat);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddBook.this,
+                R.layout.spinner_layout,paths);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cate.setAdapter(adapter);
+        cate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         num = findViewById(R.id.cop);
+        num.setLines(1);
         min = findViewById(R.id.min);
+        min.setLines(1);
     }
 
     public void setup_toolbar() {

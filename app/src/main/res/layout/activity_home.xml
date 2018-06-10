@@ -37,7 +37,8 @@
             android:src="@drawable/ic_loupe2"
             android:background="@color/money"
             android:padding="10dp"
-            android:layout_margin="5dp"/>
+            android:layout_margin="5dp"
+            android:id="@+id/search"/>
 
     </LinearLayout>
 
