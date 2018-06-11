@@ -1,9 +1,13 @@
 package com.ezzat.bookstore.View;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -84,12 +88,13 @@ public class HomeActivity extends AppCompatActivity {
     int priority;
     Cart carty;
 
-    private List<Book> books = new ArrayList<>();
+    private List<Book> books;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        books = new ArrayList<>();
         final Intent in = getIntent();
         priority = in.getIntExtra("pri",0);
         carty = (Cart) in.getSerializableExtra("cart");
@@ -305,13 +310,18 @@ public class HomeActivity extends AppCompatActivity {
      * Background Async Task to Load all books by making HTTP Request
      * */
     class LoadAllProducts extends AsyncTask<String, String, String> {
-
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
         /**
          * Before starting background thread Show Progress Dialog
          * */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(HomeActivity.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
             pDialog = new ProgressDialog(HomeActivity.this);
             pDialog.setMessage("Loading Books. Please wait...");
             pDialog.setIndeterminate(false);
@@ -360,9 +370,12 @@ public class HomeActivity extends AppCompatActivity {
                             Log.i("dodo", au[j]);
                         }
                         books.add(new Book(isb, tit, pub, au, year, pri, cate, num, mini));
+                        finished = true;
                     }
                 } else  {
                     books = temp;
+                    finished = false;
+                    msg = json.getString("msg");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -377,6 +390,10 @@ public class HomeActivity extends AppCompatActivity {
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             pDialog.dismiss();
+            if (!finished) {
+                alertDialog.setMessage(msg);
+                alertDialog.show();
+            }
             // updating UI from Background Thread
             runOnUiThread(new Runnable() {
                 public void run() {
@@ -396,13 +413,18 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     class LoadSearchedProducts extends AsyncTask<String, String, String> {
-
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
         /**
          * Before starting background thread Show Progress Dialog
          * */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(HomeActivity.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
             pDialog = new ProgressDialog(HomeActivity.this);
             pDialog.setMessage("Loading Books. Please wait...");
             pDialog.setIndeterminate(false);
@@ -416,7 +438,7 @@ public class HomeActivity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             // Building Parameters
             Map<String, String> params = new HashMap<>();
-            params.put("isbn", args[0]);
+            params.put("isbn", (args[0] == ""? "-1":args[0]));
             params.put("ti", args[1]);
             params.put("pub", args[2]);
             params.put("auth", args[3]);
@@ -447,8 +469,11 @@ public class HomeActivity extends AppCompatActivity {
                         String[] au = new String[]{};
                         books.add(new Book(isb, tit, pub, au, year, pri, cate, num, mini));
                     }
+                    finished = true;
                 } else  {
-                    books = temp;
+                    //books = temp;
+                    finished = false;
+                    msg = json.getString("msg");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -463,6 +488,10 @@ public class HomeActivity extends AppCompatActivity {
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             pDialog.dismiss();
+            if (!finished) {
+                alertDialog.setMessage(msg);
+                alertDialog.show();
+            }
             // updating UI from Background Thread
             runOnUiThread(new Runnable() {
                 public void run() {

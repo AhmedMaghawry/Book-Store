@@ -192,7 +192,17 @@ public class AddBook extends AppCompatActivity {
     public class addBooke extends AsyncTask<String, Void, Void> {
 
         HttpJsonParser jParser = new HttpJsonParser();
-        private boolean finished = true;
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(AddBook.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        }
 
         /**
          * getting All products from url
@@ -212,12 +222,9 @@ public class AddBook extends AppCompatActivity {
                 int success = json.getInt("success");
                 if (success == 0) {
                     finished = false;
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(self, "Error Happened", Toast.LENGTH_SHORT);
-                        }
-                    });
-                }
+                    msg = json.getString("msg");
+                } else
+                    finished = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -233,6 +240,9 @@ public class AddBook extends AppCompatActivity {
                 intent.putExtra("user", user);
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
+            } else {
+                alertDialog.setMessage(msg);
+                alertDialog.show();
             }
         }
     }

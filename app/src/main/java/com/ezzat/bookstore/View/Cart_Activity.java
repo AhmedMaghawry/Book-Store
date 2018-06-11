@@ -207,8 +207,19 @@ public class Cart_Activity extends AppCompatActivity {
     public class confirmOrders extends AsyncTask<String, Void, Void> {
 
         HttpJsonParser jParser = new HttpJsonParser();
-        private boolean finished = true;
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
         int index;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(Cart_Activity.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        }
+
         /**
          * getting All products from url
          * */
@@ -224,11 +235,8 @@ public class Cart_Activity extends AppCompatActivity {
                 int success = json.getInt("success");
                 if (success == 0) {
                     finished = false;
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(self, "Error Happened", Toast.LENGTH_SHORT);
-                        }
-                    });
+                } else {
+                    finished = true;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -248,6 +256,11 @@ public class Cart_Activity extends AppCompatActivity {
                 intent.putExtra("pri", getIntent().getIntExtra("pri", 0));
                 startActivity(intent);
             }
+
+            if (!finished) {
+                alertDialog.setMessage(msg);
+                alertDialog.show();
+            }
         }
     }
 
@@ -263,7 +276,17 @@ public class Cart_Activity extends AppCompatActivity {
     public class addStat extends AsyncTask<String, Void, Void> {
 
         HttpJsonParser jParser = new HttpJsonParser();
-        private boolean finished = true;
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(Cart_Activity.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        }
 
         /**
          * getting All products from url
@@ -279,16 +302,22 @@ public class Cart_Activity extends AppCompatActivity {
                 int success = json.getInt("success");
                 if (success == 0) {
                     finished = false;
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(self, "Error Happened", Toast.LENGTH_SHORT);
-                        }
-                    });
+                } else {
+                    finished = true;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (!finished) {
+                alertDialog.setMessage(msg);
+                alertDialog.show();
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ package com.ezzat.bookstore.View;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -137,12 +138,19 @@ public class Promote extends AppCompatActivity {
 
     class LoadUsers extends AsyncTask<String, String, String> {
 
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
+
         /**
          * Before starting background thread Show Progress Dialog
          * */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(Promote.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
             pDialog = new ProgressDialog(Promote.this);
             pDialog.setMessage("Loading Users. Please wait...");
             pDialog.setIndeterminate(false);
@@ -179,9 +187,11 @@ public class Promote extends AppCompatActivity {
                         String ph = c.getString("ph");
                         String shi = c.getString("shi");
                         users.add(new User(username, fi, la, password, em, ph, shi));
+                        finished = true;
                     }
                 } else  {
-                    //books = temp;
+                    finished = false;
+                    msg = json.getString("msg");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -196,6 +206,10 @@ public class Promote extends AppCompatActivity {
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             pDialog.dismiss();
+            if (!finished) {
+                alertDialog.setMessage(msg);
+                alertDialog.show();
+            }
             // updating UI from Background Thread
             runOnUiThread(new Runnable() {
                 public void run() {

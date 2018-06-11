@@ -3,6 +3,7 @@ package com.ezzat.bookstore.View;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -134,12 +135,19 @@ public class ConfirmOrder extends AppCompatActivity {
 
     class LoadOrders extends AsyncTask<String, String, String> {
 
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
+
         /**
          * Before starting background thread Show Progress Dialog
          * */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(ConfirmOrder.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
             pDialog = new ProgressDialog(ConfirmOrder.this);
             pDialog.setMessage("Loading Orders. Please wait...");
             pDialog.setIndeterminate(false);
@@ -172,8 +180,10 @@ public class ConfirmOrder extends AppCompatActivity {
                         String num = c.getString("num");
                         orders.add(new Order(isbn, num));
                     }
+                    finished = true;
                 } else  {
-                    //books = temp;
+                    finished = false;
+                    msg = json.getString("msg");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -187,7 +197,12 @@ public class ConfirmOrder extends AppCompatActivity {
          * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
+
             pDialog.dismiss();
+            if (!finished) {
+                alertDialog.setMessage(msg);
+                alertDialog.show();
+            }
             // updating UI from Background Thread
             runOnUiThread(new Runnable() {
                 public void run() {

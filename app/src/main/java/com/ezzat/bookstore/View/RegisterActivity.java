@@ -2,6 +2,7 @@ package com.ezzat.bookstore.View;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -60,7 +61,9 @@ public class RegisterActivity extends AppCompatActivity {
     public class registerNow extends AsyncTask<String, Void, Void> {
 
         HttpJsonParser jParser = new HttpJsonParser();
-        private boolean finished = true;
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
 
         /**
          * getting All products from url
@@ -81,11 +84,9 @@ public class RegisterActivity extends AppCompatActivity {
                 int success = json.getInt("success");
                 if (success == 0) {
                     finished = false;
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(self, "Error Happened", Toast.LENGTH_SHORT);
-                        }
-                    });
+                    msg = json.getString("msg");
+                } else {
+                    finished = true;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -99,6 +100,9 @@ public class RegisterActivity extends AppCompatActivity {
             if (finished) {
                 Intent intent = new Intent(RegisterActivity.this, WelcomeActivity.class);
                 startActivity(intent);
+            } else {
+                alertDialog.setMessage(msg);
+                alertDialog.show();
             }
         }
     }

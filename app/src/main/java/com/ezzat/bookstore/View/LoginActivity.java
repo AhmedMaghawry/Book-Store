@@ -3,6 +3,7 @@ package com.ezzat.bookstore.View;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -63,12 +64,19 @@ public class LoginActivity extends AppCompatActivity {
      * */
     class LoginIt extends AsyncTask<String, String, String> {
 
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
+
         /**
          * Before starting background thread Show Progress Dialog
          * */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
             pDialog = new ProgressDialog(LoginActivity.this);
             pDialog.setMessage("Login In. Please wait...");
             pDialog.setIndeterminate(false);
@@ -93,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
                 json = jParser.makeHttpRequest("http://10.42.0.1:8085/Android_DB_connect/loginManager.php", "GET", params);
             }
             try {
-                Log.i("dodo", json.toString());
                 // Checking for SUCCESS TAG
                 int success = json.getInt("success");
 
@@ -111,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                         user = new User(username, firstN, lastN, password, email, phone, ship);
                 } else  {
                     finished = false;
+                    msg = json.getString("msg");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -133,11 +141,12 @@ public class LoginActivity extends AppCompatActivity {
             } else  {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(self, "Error Happened", Toast.LENGTH_SHORT);
                         userNameEd.setText("");
                         passwordEd.setText("");
                     }
                 });
+                alertDialog.setMessage(msg);
+                alertDialog.show();
             }
         }
     }

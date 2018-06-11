@@ -3,6 +3,7 @@ package com.ezzat.bookstore.View;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -163,6 +164,19 @@ public class Statistics extends AppCompatActivity {
 
     class LoadCustomers extends AsyncTask<String, String, String> {
 
+
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(Statistics.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        }
+
         /**
          * getting All products from url
          * */
@@ -193,8 +207,10 @@ public class Statistics extends AppCompatActivity {
                         String shi = c.getString("shi");
                         users.add(new User(username, fi, la, password, em, ph, shi));
                     }
+                    finished = true;
                 } else  {
-                    //books = temp;
+                    finished = false;
+                    msg = json.getString("msg");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -208,6 +224,10 @@ public class Statistics extends AppCompatActivity {
          * **/
         protected void onPostExecute(String file_url) {
             // updating UI from Background Thread
+            if (!finished) {
+                alertDialog.setMessage(msg);
+                alertDialog.show();
+            }
             runOnUiThread(new Runnable() {
                 public void run() {
                     UserAdapter mAdapterUser = new UserAdapter(users, true);
@@ -222,6 +242,18 @@ public class Statistics extends AppCompatActivity {
 
     class LoadBooks extends AsyncTask<String, String, String> {
 
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(Statistics.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        }
         /**
          * getting All products from url
          * */
@@ -254,6 +286,10 @@ public class Statistics extends AppCompatActivity {
                         String[] au = new String[]{};
                         books.add(new Book(isb, tit, pub, au, year, pri, cate, num, mini));
                     }
+                    finished = true;
+                } else {
+                    finished = false;
+                    msg = json.getString("msg");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -267,6 +303,10 @@ public class Statistics extends AppCompatActivity {
          * **/
         protected void onPostExecute(String file_url) {
             // updating UI from Background Thread
+            if (!finished) {
+                alertDialog.setMessage(msg);
+                alertDialog.show();
+            }
             runOnUiThread(new Runnable() {
                 public void run() {
                     if (books.size() != 0) {
@@ -282,6 +322,19 @@ public class Statistics extends AppCompatActivity {
     }
 
     class LoadTotal extends AsyncTask<String, String, String> {
+
+        AlertDialog alertDialog;
+        boolean finished = true;
+        String msg;
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            alertDialog = new AlertDialog.Builder(Statistics.this).create();
+            alertDialog.setTitle("Error");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+        }
 
         /**
          * getting All products from url
