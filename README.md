@@ -106,8 +106,22 @@ c. The top 10 selling books for the last three months
 
 - Interactive design which any action have an effect on the views this affect will be shown immediately on the UI.
 
-Welcome Page  ![Welcome](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/2.png)
-Customer Home ![Customer Home](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/3.png)
+***Welcome Page***
+
 ![Welcome](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/2.png)
-![Welcome](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/2.png)
-![Welcome](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/2.png)
+
+***Customer Pages***
+
+![Customer Home](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/3.png)
+![Book Into](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/4.png)
+![Confirm Cart](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/5.png)
+![Credit](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/6.png)
+
+***Manager Pages***
+
+![Manager Home](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/7.png)
+![Book Into](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/8.png)
+![Confirm](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/9.png)
+![Add Book](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/10.png)
+![Promote](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/11.png)
+![Confirm](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/12.png)
