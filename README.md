@@ -6,7 +6,7 @@
 
 - This database can be used to store the records of customers and their preferences, the technical/nontechnical books, magazines to which customers can be subscribed, and the customerorders to the shop (e.g. telephone orders of customer for books, etc.), to be sent to their address.
 
-** Description : **
+**Description :**
 
 ## 1.ER Diagram :
 
