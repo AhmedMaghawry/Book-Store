@@ -125,3 +125,13 @@ c. The top 10 selling books for the last three months
 ![Add Book](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/10.png)
 ![Promote](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/11.png)
 ![Confirm](https://github.com/AhmedMaghawry/Book-Store/blob/master/photos%20Report/12.png)
+
+---
+
+**How to Run:**
+1. Install lampp
+2. Add the ```Android_DB_connect``` file to htdocs in the src of the lampp
+3. run the apache server on the localhost
+4. connect your device to a wifi hotspot from the host PC
+5. Run the application
+6. Enjoy
